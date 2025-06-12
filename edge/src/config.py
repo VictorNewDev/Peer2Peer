@@ -1,13 +1,16 @@
-# config.py (do edge)
-EDGE_NODE_HOST = '127.0.0.1'
-EDGE_NODE_PORT = 8000            # Porta TCP para registro e troca de mensagens
-DISCOVERY_PORT = 50000           # Porta UDP para o service discovery
+# config.py (edge node)
+import socket
+
+# Network settings
+EDGE_NODE_HOST = socket.gethostbyname(socket.gethostname())  # Get actual IP
+EDGE_NODE_PORT = 55000  # TCP port for registration and message exchange
+DISCOVERY_PORT = 55001  # UDP port for service discovery (must match peers)
 UPDATE_INTERVAL = 30
 
 BUFFER_SIZE = 4096
 ENCODING = 'utf-8'
 
-# Diretórios para tarefas e resultados no Master (edge)
+# Directories for tasks and results
 TASKS_DIR = 'tasks'
 RESULTS_DIR = 'results'
 

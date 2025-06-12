@@ -6,5 +6,17 @@ def send_json(conn, data):
     conn.sendall(message)
 
 def receive_json(conn):
-    data = conn.recv(BUFFER_SIZE)
-    return json.loads(data.decode(ENCODING))
+    chunks = []
+    while True:
+        chunk = conn.recv(BUFFER_SIZE)
+        if not chunk:
+            break
+        chunks.append(chunk)
+        try:
+            return json.loads(b''.join(chunks).decode(ENCODING))
+        except json.JSONDecodeError:
+            # If we can't decode yet, continue receiving
+            continue
+    
+    # If we get here, the connection was closed before receiving a valid JSON
+    raise ConnectionError("Connection closed before receiving complete message")
